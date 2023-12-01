@@ -82,6 +82,15 @@ router.get("/getAllUsers", authorizationAdm, async (req, res) => {
   }
 });
 
-
+router.get("/getBydId/:userId", authorizationAdm, async (req, res) => {
+  let { userId } = req.params;
+  try {
+    let user = await User.getById(userId);
+    res.status(200).json({ user });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ status: "Error" });
+  }
+});
 
 module.exports = router;
