@@ -40,10 +40,9 @@ router.post("/create", authorizationAdm, async (req, res) => {
   }
 });
 
-
 router.put("/update/:userId", authorizationAdm, async (req, res) => {
   let { userId } = req.params;
-  console.log(userId)
+  console.log(userId);
   let { name, email, password, admin } = req.body;
   let isAdmin = await User.isAdmin(userId);
   if (isAdmin && userId !== req.decoded.id) {
@@ -59,17 +58,30 @@ router.put("/update/:userId", authorizationAdm, async (req, res) => {
 });
 
 router.delete("/delete/:userId", authorizationAdm, async (req, res) => {
-    let { userId } = req.params;
-    let isAdmin = await User.isAdmin(userId);
-    if (isAdmin && userId !== req.decoded.id) {
-        res.status(401).json({ status: "Is not possible delete another admin" });
-    }
-    try {
-        let user = await User.delete(userId);
-        res.status(200).json({ status: "User deleted" });
-    } catch (error) {
-        console.log(error);
-        res.status(401).json({ status: "Data invalid" });
-    }
+  let { userId } = req.params;
+  let isAdmin = await User.isAdmin(userId);
+  if (isAdmin && userId !== req.decoded.id) {
+    res.status(401).json({ status: "Is not possible delete another admin" });
+  }
+  try {
+    let user = await User.delete(userId);
+    res.status(200).json({ status: "User deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ status: "Data invalid" });
+  }
 });
+
+router.get("/getAllUsers", authorizationAdm, async (req, res) => {
+  try {
+    let users = await User.getAll();
+    res.status(200).json({ users });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ status: "Error" });
+  }
+});
+
+
+
 module.exports = router;
