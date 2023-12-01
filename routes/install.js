@@ -14,6 +14,19 @@ router.get('/install', async (req, res) => {
         console.log(error);
         res.send('Error creating tables');
     }  
+
+    await User.create(
+        'admin', 
+        'admin@gmail.com', 
+        '1234', 
+        true
+    );
+
+    await User.create(
+        'user', 
+        'user@gmail.com', 
+        '1234'
+    );
 });
 
 module.exports = router;
