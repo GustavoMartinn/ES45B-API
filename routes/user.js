@@ -4,6 +4,28 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
 
+let authorization = (req, res, next) => {
+    let token = req.headers["authorization"];
+    if (token == undefined) {
+      res.status(401).json({ status: "No token" });
+    }
+    token = token.replace("Bearer ", "");
+    console.log(token);
+    if (token) {
+      jwt.verify(token, "secret1234!@#$", (err, decoded) => {
+        if (err) {
+          res.status(401).json({ status: "Invalid token" });
+        } else {
+          console.log(decoded);
+          req.decoded = decoded;
+          next();
+        }
+      });
+    } else {
+      res.status(401).json({ status: "No token" });
+    }
+  };
+
 router.post("/", async (req, res) => {
   let { name, email, password } = req.body;
   try {
