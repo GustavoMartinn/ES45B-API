@@ -12,3 +12,28 @@ const sequelize = new Sequelize(
         port:process.env.DB_PORT,
     }
 );
+
+const UserModel = sequelize.define('User', {
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    email: {
+        type: DataTypes.STRING,
+        unique:true,
+        allowNull: false,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    admin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
+});
