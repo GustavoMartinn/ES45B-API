@@ -37,3 +37,21 @@ const UserModel = sequelize.define('User', {
         defaultValue: false,
     },
 });
+
+const bankAccountModel = sequelize.define('BankAccount', {
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    initialBalance: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    bankName:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
+});
+
+bankAccountModel.belongsTo(UserModel, {foreignKey: 'userId'});
