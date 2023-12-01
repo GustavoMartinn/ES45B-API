@@ -55,3 +55,26 @@ const bankAccountModel = sequelize.define('BankAccount', {
 });
 
 bankAccountModel.belongsTo(UserModel, {foreignKey: 'userId'});
+
+const transactionModel = sequelize.define('Transaction', {
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    value: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    date: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    type: {
+        type: DataTypes.ENUM('INCOME', 'EXPENSE'),
+        allowNull: false,
+    }
+});
+
+transactionModel.belongsTo(bankAccountModel, {foreignKey: 'bankAccountId'});
+transactionModel.belongsTo(UserModel, {foreignKey: 'userId'});
