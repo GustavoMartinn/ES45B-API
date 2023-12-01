@@ -78,3 +78,33 @@ const transactionModel = sequelize.define('Transaction', {
 
 transactionModel.belongsTo(bankAccountModel, {foreignKey: 'bankAccountId'});
 transactionModel.belongsTo(UserModel, {foreignKey: 'userId'});
+
+const investmentModel = sequelize.define('Investment', {
+    id:{
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    code:{
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    buyPrice: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    buyDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+});
+
+investmentModel.belongsTo(UserModel, {foreignKey: 'userId'});
+
+module.exports = {
+    sequelize,
+    UserModel,
+    bankAccountModel,
+    transactionModel,
+    investmentModel,
+}
