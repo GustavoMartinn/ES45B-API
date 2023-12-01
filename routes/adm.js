@@ -40,4 +40,23 @@ router.post("/create", authorizationAdm, async (req, res) => {
   }
 });
 
+
+router.put("/update/:userId", authorizationAdm, async (req, res) => {
+  let { userId } = req.params;
+  console.log(userId)
+  let { name, email, password, admin } = req.body;
+  let isAdmin = await User.isAdmin(userId);
+
+  if (isAdmin && userId !== req.decoded.id) {
+    res.status(401).json({ status: "Is not possible update another admin" });
+  }
+  try {
+    let user = await User.update(userId, name, email, password, admin);
+    res.status(200).json({ status: "User updated" });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ status: "Data invalid" });
+  }
+});
+
 module.exports = router;
