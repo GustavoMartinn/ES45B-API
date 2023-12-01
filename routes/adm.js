@@ -46,7 +46,6 @@ router.put("/update/:userId", authorizationAdm, async (req, res) => {
   console.log(userId)
   let { name, email, password, admin } = req.body;
   let isAdmin = await User.isAdmin(userId);
-
   if (isAdmin && userId !== req.decoded.id) {
     res.status(401).json({ status: "Is not possible update another admin" });
   }
@@ -59,4 +58,18 @@ router.put("/update/:userId", authorizationAdm, async (req, res) => {
   }
 });
 
+router.delete("/delete/:userId", authorizationAdm, async (req, res) => {
+    let { userId } = req.params;
+    let isAdmin = await User.isAdmin(userId);
+    if (isAdmin && userId !== req.decoded.id) {
+        res.status(401).json({ status: "Is not possible delete another admin" });
+    }
+    try {
+        let user = await User.delete(userId);
+        res.status(200).json({ status: "User deleted" });
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({ status: "Data invalid" });
+    }
+});
 module.exports = router;
