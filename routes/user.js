@@ -26,7 +26,7 @@ let authorization = (req, res, next) => {
   }
 };
 
-router.post("/", async (req, res) => {
+router.post("/create", async (req, res) => {
   let { name, email, password } = req.body;
   try {
     let user = await User.create(name, email, password);
@@ -86,6 +86,17 @@ router.delete("/delete", authorization, async (req, res) => {
     console.log(error);
     res.status(401).json({ status: "Data invalid" });
   }
+});
+
+router.get("/get", authorization, async (req, res) => {
+    let { id } = req.decoded;
+    try {
+        let user = await User.getById(id);
+        res.status(200).json({ user });
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({ status: "Data invalid" });
+    }
 });
 
 module.exports = router;
