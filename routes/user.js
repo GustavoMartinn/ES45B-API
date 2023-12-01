@@ -74,6 +74,18 @@ router.put("/update", authorization, async (req, res) => {
   }
 });
 
-
+router.delete("/delete", authorization, async (req, res) => {
+  let { id } = req.decoded;
+  try {
+    let deleted = await User.delete(id);
+    if (deleted) {
+      res.status(200).json({ status: "User deleted" });
+    }
+    res.status(500).json({ status: "User not deleted" });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ status: "Data invalid" });
+  }
+});
 
 module.exports = router;
