@@ -10,13 +10,11 @@ let authorization = (req, res, next) => {
     res.status(401).json({ status: "No token" });
   }
   token = token.replace("Bearer ", "");
-  console.log(token);
   if (token) {
     jwt.verify(token, "secret1234!@#$", (err, decoded) => {
       if (err) {
         res.status(401).json({ status: "Invalid token" });
       } else {
-        console.log(decoded);
         req.decoded = decoded;
         next();
       }
@@ -26,7 +24,7 @@ let authorization = (req, res, next) => {
   }
 };
 
-router.post("/create", async (req, res) => {
+router.post("/", async (req, res) => {
   let { name, email, password } = req.body;
   try {
     let user = await User.create(name, email, password);
@@ -58,7 +56,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.put("/update", authorization, async (req, res) => {
+router.put("/", authorization, async (req, res) => {
   let { id } = req.decoded;
   let { name, email, password } = req.body;
   try {
@@ -66,6 +64,7 @@ router.put("/update", authorization, async (req, res) => {
 
     if (updated) {
       res.status(200).json({ status: "User updated" });
+      return;
     }
     res.status(500).json({ status: "User not updated" });
   } catch (error) {
@@ -74,12 +73,13 @@ router.put("/update", authorization, async (req, res) => {
   }
 });
 
-router.delete("/delete", authorization, async (req, res) => {
+router.delete("/", authorization, async (req, res) => {
   let { id } = req.decoded;
   try {
     let deleted = await User.delete(id);
     if (deleted) {
       res.status(200).json({ status: "User deleted" });
+      return;
     }
     res.status(500).json({ status: "User not deleted" });
   } catch (error) {
@@ -88,7 +88,7 @@ router.delete("/delete", authorization, async (req, res) => {
   }
 });
 
-router.get("/get", authorization, async (req, res) => {
+router.get("/", authorization, async (req, res) => {
     let { id } = req.decoded;
     try {
         let user = await User.getById(id);

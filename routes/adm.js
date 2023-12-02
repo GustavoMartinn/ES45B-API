@@ -29,7 +29,7 @@ let authorizationAdm = (req, res, next) => {
   }
 };
 
-router.post("/create", authorizationAdm, async (req, res) => {
+router.post("/", authorizationAdm, async (req, res) => {
   let { name, email, password, admin } = req.body;
   try {
     let user = await User.create(name, email, password, admin);
@@ -40,7 +40,7 @@ router.post("/create", authorizationAdm, async (req, res) => {
   }
 });
 
-router.put("/update/:userId", authorizationAdm, async (req, res) => {
+router.put("/user/:userId", authorizationAdm, async (req, res) => {
   let { userId } = req.params;
   console.log(userId);
   let { name, email, password, admin } = req.body;
@@ -57,7 +57,7 @@ router.put("/update/:userId", authorizationAdm, async (req, res) => {
   }
 });
 
-router.delete("/delete/:userId", authorizationAdm, async (req, res) => {
+router.delete("/user/:userId", authorizationAdm, async (req, res) => {
   let { userId } = req.params;
   let isAdmin = await User.isAdmin(userId);
   if (isAdmin && userId !== req.decoded.id) {
@@ -72,7 +72,7 @@ router.delete("/delete/:userId", authorizationAdm, async (req, res) => {
   }
 });
 
-router.get("/getAllUsers", authorizationAdm, async (req, res) => {
+router.get("/user/all", authorizationAdm, async (req, res) => {
   try {
     let users = await User.getAll();
     res.status(200).json({ users });
@@ -82,7 +82,7 @@ router.get("/getAllUsers", authorizationAdm, async (req, res) => {
   }
 });
 
-router.get("/getBydId/:userId", authorizationAdm, async (req, res) => {
+router.get("/user/:userId", authorizationAdm, async (req, res) => {
   let { userId } = req.params;
   try {
     let user = await User.getById(userId);
