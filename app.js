@@ -7,6 +7,7 @@ const admRouter = require('./routes/adm');
 const bankAccountRouter = require('./routes/bankAccount');
 const transactionRouter = require('./routes/transaction');
 const investmentRouter = require('./routes/investment');
+const docsRouter = require('./routes/docs');
 
 app.use(express.json());
 
@@ -16,6 +17,9 @@ app.use('/adm', admRouter);
 app.use('/bankAccount', bankAccountRouter);
 app.use('/transaction', transactionRouter);
 app.use('/investment', investmentRouter);
+app.use('/docs', docsRouter);
+
+
 
 
 app.listen(3000, () => {
