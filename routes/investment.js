@@ -4,6 +4,10 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Investment = require("../model/Investment");
 
+const ApiClient = require("../utils/finance/ApiClient");
+
+const finaceApiClient = new ApiClient(process.env.FINANCE_API_URL, process.env.FINANCE_API_KEY)
+
 let authorization = (req, res, next) => {
   let token = req.headers["authorization"];
   if (token == undefined) {
@@ -25,10 +29,10 @@ let authorization = (req, res, next) => {
 }
 
 router.post("/", authorization, async (req, res) => {
-  let { code, buyPrice, buyDate } = req.body;
+  let { code, amount, buyPrice, buyDate } = req.body;
   let { id: userId } = req.decoded;
   try {
-    let investment = await Investment.create(code, buyPrice, buyDate, userId)
+    let investment = await Investment.create(code, amount, buyPrice, buyDate, userId)
     res.status(200).json({ status: "Investment created" });
   } catch (error) {
     console.log(error);
@@ -38,9 +42,10 @@ router.post("/", authorization, async (req, res) => {
 
 router.get("/all", authorization, async (req, res) => {
   let { id: userId } = req.decoded;
+  let { page, limit } = req.query;
 
   try {
-    let investment = await Investment.getAllByUserId(userId);
+    let investment = await Investment.getAllByUserId(userId, page, limit);
     res.status(200).json({ investment });
   } catch (error) {
     console.log(error);
@@ -62,10 +67,10 @@ router.get("/:id", authorization, async (req, res) => {
 
 router.put("/:id", authorization, async (req, res) => {
   let { id } = req.params;
-  let { code, buyPrice, buyDate } = req.body;
+  let { code, amount, buyPrice, buyDate } = req.body;
   let { id: userId } = req.decoded;
   try {
-    let investment = await Investment.update(id, code, buyPrice, buyDate, userId);
+    let investment = await Investment.update(id, code, amount, buyPrice, buyDate, userId);
     res.status(200).json({ status: "Investment updated" });
   } catch (error) {
     console.log(error);
@@ -84,5 +89,50 @@ router.delete("/:id", authorization, async (req, res) => {
     res.status(401).json({ status: "Data invalid" });
   }
 })
+
+router.get("/profit/all", authorization, async (req, res) => {
+  let { id: userId } = req.decoded;
+  try {
+    let investment = await Investment.getAllByUserId(userId);
+    let profit = 0;
+    for (let i = 0; i < investment.length; i++) {
+      let code = investment[i].code;
+      let amount = investment[i].amount;
+      let buyPrice = investment[i].buyPrice;
+      let todayPrice = await finaceApiClient.getQuotePrice(code);
+      profit += (todayPrice - buyPrice) * amount;
+    }
+    res.status(200).json({ profit });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ status: "Data invalid" });
+  }
+});
+
+router.get("/profit/:code", authorization, async (req, res) => {
+  let { code } = req.params;
+  try {
+    let investment = await Investment.getQuote(code);
+
+    if (investment === null) {
+      res.status(401).json({ status: "You don't have this quote" });
+      return;
+    }
+
+    try {
+      finaceApiClient.getQuotePrice(code).then((data) => {
+        let profit = (data - investment.buyPrice) * investment.amount;
+        res.status(200).json({ profit });
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ status: "Internal server error" });
+    }
+
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ status: "Data invalid" });
+  }
+});
 
 module.exports = router;
