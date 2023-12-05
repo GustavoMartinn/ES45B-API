@@ -12,8 +12,13 @@ module.exports = {
         return user;
     },
 
-    getAll: async () => {
-        const users = await UserModel.findAll();
+    getAll: async (page = 0, pageSize = 5) => {
+        const users = await UserModel.findAll(
+            {
+                limit: pageSize,
+                offset: page * pageSize,
+            }
+        );
         return users;
     },
 

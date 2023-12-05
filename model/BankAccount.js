@@ -10,11 +10,13 @@ module.exports = {
         return bankAccount;
     },
 
-    getAllByUserId: async (userId) => {
+    getAllByUserId: async (userId, page = 0, pageSize = 5) => {
         const bankAccounts = await bankAccountModel.findAll({
             where: {
                 userId,
             },
+            limit: pageSize,
+            offset: page * pageSize,
         });
         return bankAccounts;
     },

@@ -73,8 +73,9 @@ router.delete("/user/:userId", authorizationAdm, async (req, res) => {
 });
 
 router.get("/user/all", authorizationAdm, async (req, res) => {
+  let { page, limit } = req.query;
   try {
-    let users = await User.getAll();
+    let users = await User.getAll(page, limit);
     res.status(200).json({ users });
   } catch (error) {
     console.log(error);

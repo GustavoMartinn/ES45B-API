@@ -12,21 +12,25 @@ module.exports = {
         return transaction;
     },
 
-    getAllByUserId: async (userId) => {
+    getAllByUserId: async (userId, page = 0, pageSize = 5) => {
         const transactions = await transactionModel.findAll({
             where: {
                 userId,
             },
+            limit: pageSize,
+            offset: page * pageSize,
         });
         return transactions;
     },
 
-    getAllByBankAccountId: async (bankAccountId, userId) => {
+    getAllByBankAccountId: async (bankAccountId, userId, page = 0, pageSize = 5) => {
         const transactions = await transactionModel.findAll({
             where: {
                 bankAccountId,
                 userId,
             },
+            limit: pageSize,
+            offset: page * pageSize,
         });
         return transactions;
     },

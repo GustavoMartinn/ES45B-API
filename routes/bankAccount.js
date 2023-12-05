@@ -38,9 +38,10 @@ router.post("/", authorization, async (req, res) => {
 
 router.get("/all", authorization, async (req, res) => {
   let { id: userId } = req.decoded;
+  let { page, limit } = req.query;
 
   try {
-    let bankAccounts = await BankAccount.getAllByUserId(userId);
+    let bankAccounts = await BankAccount.getAllByUserId(userId, page, limit);
     res.status(200).json({ bankAccounts });
   } catch (error) {
     console.log(error);
