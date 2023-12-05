@@ -1,9 +1,10 @@
 const {investmentModel} = require('./bd');
 
 module.exports = {
-    create: async (code, buyPrice, buyDate, userId) => {
+    create: async (code, amount, buyPrice, buyDate, userId) => {
         const investment = await investmentModel.create({
             code,
+            amount,
             buyPrice,
             buyDate,
             userId,
@@ -11,11 +12,13 @@ module.exports = {
         return investment;
     },
 
-    getAllByUserId: async (userId) => {
+    getAllByUserId: async (userId, page = 0, pageSize = 5) => {
         const investments = await investmentModel.findAll({
             where: {
                 userId,
             },
+            limit: pageSize,
+            offset: page * pageSize,
         });
         return investments;
     },
@@ -29,9 +32,19 @@ module.exports = {
         return investment;
     },
 
-    update: async (id, code, buyPrice, buyName, userId) => {
+    getQuote: async (code) => {
+        const investment = await investmentModel.findOne({
+            where: {
+                code,
+            },
+        })
+        return investment;
+    },
+
+    update: async (id, code, amount, buyPrice, buyName, userId) => {
         const investment = await investmentModel.update({
             code,
+            amount,
             buyPrice,
             buyName,
         }, {

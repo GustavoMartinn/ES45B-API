@@ -89,6 +89,10 @@ const investmentModel = sequelize.define('Investment', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    amount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     buyPrice: {
         type: DataTypes.FLOAT,
         allowNull: false,
