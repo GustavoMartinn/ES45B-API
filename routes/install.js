@@ -18,14 +18,14 @@ router.get('/install', async (req, res) => {
     await User.create(
         'admin', 
         'admin@gmail.com', 
-        '1234', 
+        'Senha123', 
         true
     );
 
     await User.create(
         'user', 
         'user@gmail.com', 
-        '1234'
+        'Senha123'
     );
 });
 

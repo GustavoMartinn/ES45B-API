@@ -3,7 +3,7 @@ const router = express.Router();
 
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
-const { sequelize } = require("../model/bd");
+const { verifyFields } = require("../utils/verifyFields");
 
 let authorizationAdm = (req, res, next) => {
   let token = req.headers["authorization"];
@@ -11,13 +11,11 @@ let authorizationAdm = (req, res, next) => {
     res.status(401).json({ status: "No token" });
   }
   token = token.replace("Bearer ", "");
-  console.log(token);
   if (token) {
     jwt.verify(token, "secret1234!@#$", (err, decoded) => {
       if (err) {
         res.status(401).json({ status: "Invalid token" });
       } else {
-        console.log(decoded);
         req.decoded = decoded;
         if (decoded.admin) {
           next();
@@ -30,29 +28,43 @@ let authorizationAdm = (req, res, next) => {
 };
 
 router.post("/", authorizationAdm, async (req, res) => {
-  let { name, email, password, admin } = req.body;
+  let { name, email, password, isAdmin } = req.body;
+
+  const errors = verifyFields(req.body, ["name", "email", "password", "isAdmin"]);
+
+    if (errors.length > 0) {
+      res.status(400).json({ status: "Data invalid", errors });
+      return;
+    }
+
   try {
-    let user = await User.create(name, email, password, admin);
+    let user = await User.create(name, email, password, isAdmin);
     res.status(200).json({ status: "User created" });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ status: "Data invalid" });
   }
 });
 
 router.put("/user/:userId", authorizationAdm, async (req, res) => {
   let { userId } = req.params;
-  console.log(userId);
-  let { name, email, password, admin } = req.body;
-  let isAdmin = await User.isAdmin(userId);
-  if (isAdmin && userId !== req.decoded.id) {
+  let { name, email, password, isAdmin } = req.body;
+
+  const errors = verifyFields(req.body, ["name", "email", "password", "isAdmin"]);
+
+  if (errors.length > 0) {
+    res.status(400).json({ status: "Data invalid", errors });
+    return;
+  }
+
+
+  let userIsAdmin = await User.isAdmin(userId);
+  if (userIsAdmin && userId !== req.decoded.id) {
     res.status(401).json({ status: "Is not possible update another admin" });
   }
   try {
-    let user = await User.update(userId, name, email, password, admin);
+    let user = await User.update(userId, name, email, password, isAdmin);
     res.status(200).json({ status: "User updated" });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ status: "Data invalid" });
   }
 });
@@ -67,7 +79,6 @@ router.delete("/user/:userId", authorizationAdm, async (req, res) => {
     let user = await User.delete(userId);
     res.status(200).json({ status: "User deleted" });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ status: "Data invalid" });
   }
 });
@@ -78,7 +89,6 @@ router.get("/user/all", authorizationAdm, async (req, res) => {
     let users = await User.getAll(page, limit);
     res.status(200).json({ users });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ status: "Error" });
   }
 });
@@ -89,7 +99,6 @@ router.get("/user/:userId", authorizationAdm, async (req, res) => {
     let user = await User.getById(userId);
     res.status(200).json({ user });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ status: "Error" });
   }
 });

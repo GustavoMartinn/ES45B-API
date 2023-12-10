@@ -3,6 +3,7 @@ const router = express.Router();
 
 const jwt = require("jsonwebtoken");
 const User = require("../model/User");
+const { verifyFields } = require("../utils/verifyFields");
 
 let authorization = (req, res, next) => {
   let token = req.headers["authorization"];
@@ -26,19 +27,32 @@ let authorization = (req, res, next) => {
 
 router.post("/", async (req, res) => {
   let { name, email, password } = req.body;
+
+  const errors = verifyFields(req.body, ["name", "email", "password"]);
+
+  if (errors.length > 0) {
+    res.status(400).json({ status: "Data invalid", errors });
+    return;
+  }
+
   try {
     let user = await User.create(name, email, password);
     res.status(200).json({ status: "User created" });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ status: "Data invalid" });
   }
 });
 
 router.post("/login", async (req, res) => {
   let { email, password } = req.body;
-  console.log(email);
-  console.log(password);
+
+  const errors = verifyFields(req.body, ["email", "password"]);
+
+  if (errors.length > 0) {
+    res.status(400).json({ status: "Data invalid", errors });
+    return;
+  }
+
   const user = await User.getByEmail(email);
   if (user) {
     if (user.password === password) {
@@ -59,6 +73,14 @@ router.post("/login", async (req, res) => {
 router.put("/", authorization, async (req, res) => {
   let { id } = req.decoded;
   let { name, email, password } = req.body;
+
+  const errors = verifyFields(req.body, ["name", "email", "password"]);
+
+  if (errors.length > 0) {
+    res.status(400).json({ status: "Data invalid", errors });
+    return;
+  }
+
   try {
     let updated = await User.update(id, name, email, password);
 
@@ -68,7 +90,6 @@ router.put("/", authorization, async (req, res) => {
     }
     res.status(500).json({ status: "User not updated" });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ status: "Data invalid" });
   }
 });
@@ -83,7 +104,6 @@ router.delete("/", authorization, async (req, res) => {
     }
     res.status(500).json({ status: "User not deleted" });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ status: "Data invalid" });
   }
 });
@@ -94,7 +114,7 @@ router.get("/", authorization, async (req, res) => {
         let user = await User.getById(id);
         res.status(200).json({ user });
     } catch (error) {
-        console.log(error);
+  
         res.status(401).json({ status: "Data invalid" });
     }
 });

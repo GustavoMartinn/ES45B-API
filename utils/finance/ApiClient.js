@@ -10,7 +10,6 @@ class ApiClient {
     for (let key in params) {
       url.searchParams.append(key, params[key]);
     }
-    console.log(url.toString());
     return url;
   }
 
@@ -38,7 +37,6 @@ class ApiClient {
   
       return todayPrice;
     } catch (error) {
-      console.log(error);
       return null;
     }
   }
