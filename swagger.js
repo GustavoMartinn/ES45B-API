@@ -16,17 +16,27 @@ const doc = {
     produces: ['application/json'],
     tags: [
         {
-        name: 'User',
-        description: 'User related end-points',
+            name: 'User',
+            description: 'Endpoints para manipulação de usuários',
         },
+        {
+            name: 'Admin',
+            description: 'Endpoints para manipulação de administradores',
+        },
+        {
+            name: 'Bank Account',
+            description: 'Endpoints para manipulação de contas bancárias',
+        },
+        {
+            name: 'Investment',
+            description: 'Endpoints para manipulação de investimentos',
+        },
+        {
+            name: 'Transaction',
+            description: 'Endpoints para manipulação de transações',
+        },
+
     ],
-    definitions: {
-        User: {
-        id: '1',
-        name: 'John Doe',
-        email: '',
-        },
-    },
 }
 
 swaggerAutoGen(outputFile, endpointsFiles, doc);

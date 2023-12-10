@@ -26,6 +26,8 @@ let authorization = (req, res, next) => {
 }
 
 router.post("/", authorization, async (req, res) => {
+  // #swagger.tags = ['Bank Account']
+  // #swagger.description = 'Endpoint para criar uma nova conta bancária'
   let { name, initialBalance } = req.body;
   let { id: userId } = req.decoded;
 
@@ -45,6 +47,8 @@ router.post("/", authorization, async (req, res) => {
 });
 
 router.get("/all", authorization, async (req, res) => {
+  // #swagger.tags = ['Bank Account']
+  // #swagger.description = 'Endpoint para listar todas as contas bancárias do usuário'
   let { id: userId } = req.decoded;
   let { page, limit } = req.query;
 
@@ -57,6 +61,8 @@ router.get("/all", authorization, async (req, res) => {
 });
 
 router.get("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Bank Account']
+  // #swagger.description = 'Endpoint para listar uma conta bancária específica'
   let { id } = req.params;
   let { id: userId } = req.decoded;
   try {
@@ -68,6 +74,8 @@ router.get("/:id", authorization, async (req, res) => {
 });
 
 router.put("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Bank Account']
+  // #swagger.description = 'Endpoint para atualizar uma conta bancária'
   let { id } = req.params;
   let { name, initialBalance } = req.body;
   let { id: userId } = req.decoded;
@@ -80,6 +88,8 @@ router.put("/:id", authorization, async (req, res) => {
 });
 
 router.delete("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Bank Account']
+  // #swagger.description = 'Endpoint para deletar uma conta bancária'
   let { id } = req.params;
   let { id: userId } = req.decoded;
   try {

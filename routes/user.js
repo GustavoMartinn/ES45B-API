@@ -26,6 +26,9 @@ let authorization = (req, res, next) => {
 };
 
 router.post("/", async (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Endpoint para criar um novo usuário'
+
   let { name, email, password } = req.body;
 
   const errors = verifyFields(req.body, ["name", "email", "password"]);
@@ -44,6 +47,10 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Endpoint para realizar login'
+
+
   let { email, password } = req.body;
 
   const errors = verifyFields(req.body, ["email", "password"]);
@@ -71,6 +78,9 @@ router.post("/login", async (req, res) => {
 });
 
 router.put("/", authorization, async (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Endpoint para atualizar um usuário'
+
   let { id } = req.decoded;
   let { name, email, password } = req.body;
 
@@ -95,6 +105,8 @@ router.put("/", authorization, async (req, res) => {
 });
 
 router.delete("/", authorization, async (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Endpoint para deletar um usuário'
   let { id } = req.decoded;
   try {
     let deleted = await User.delete(id);
@@ -109,6 +121,8 @@ router.delete("/", authorization, async (req, res) => {
 });
 
 router.get("/", authorization, async (req, res) => {
+    // #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint para buscar um usuário'
     let { id } = req.decoded;
     try {
         let user = await User.getById(id);

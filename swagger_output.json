@@ -3,12 +3,40 @@
   "info": {
     "version": "1.0.0",
     "title": "API",
-    "description": "API controle de finanças pessoais"
+    "description": "API para controle de finanças pessoais"
   },
   "host": "localhost:3000",
   "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Endpoints para manipulação de usuários"
+    },
+    {
+      "name": "Admin",
+      "description": "Endpoints para manipulação de administradores"
+    },
+    {
+      "name": "Bank Account",
+      "description": "Endpoints para manipulação de contas bancárias"
+    },
+    {
+      "name": "Investment",
+      "description": "Endpoints para manipulação de investimentos"
+    },
+    {
+      "name": "Transaction",
+      "description": "Endpoints para manipulação de transações"
+    }
+  ],
   "schemes": [
     "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
     "/install": {
@@ -23,7 +51,10 @@
     },
     "/user/": {
       "post": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para criar um novo usuário",
         "parameters": [
           {
             "name": "body",
@@ -48,13 +79,19 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
         }
       },
       "put": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para atualizar um usuário",
         "parameters": [
           {
             "name": "body",
@@ -78,6 +115,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -88,7 +128,10 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para deletar um usuário",
         "responses": {
           "200": {
             "description": "OK"
@@ -102,7 +145,10 @@
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para buscar um usuário",
         "responses": {
           "200": {
             "description": "OK"
@@ -115,7 +161,10 @@
     },
     "/user/login": {
       "post": {
-        "description": "",
+        "tags": [
+          "User"
+        ],
+        "description": "Endpoint para realizar login",
         "parameters": [
           {
             "name": "body",
@@ -137,6 +186,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
@@ -145,7 +197,10 @@
     },
     "/adm/": {
       "post": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "description": "Endpoint para criar um novo administrador",
         "parameters": [
           {
             "name": "authorization",
@@ -167,7 +222,7 @@
                 "password": {
                   "example": "any"
                 },
-                "admin": {
+                "isAdmin": {
                   "example": "any"
                 }
               }
@@ -178,6 +233,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
@@ -186,7 +244,10 @@
     },
     "/adm/user/{userId}": {
       "put": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "description": "Endpoint para atualizar um usuário que não seja administrador ou atualizar a si mesmo",
         "parameters": [
           {
             "name": "userId",
@@ -214,7 +275,7 @@
                 "password": {
                   "example": "any"
                 },
-                "admin": {
+                "isAdmin": {
                   "example": "any"
                 }
               }
@@ -225,13 +286,19 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "description": "Endpoint para deletar um usuário que não seja administrador ou deletar a si mesmo",
         "parameters": [
           {
             "name": "userId",
@@ -255,7 +322,10 @@
         }
       },
       "get": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "description": "Endpoint para buscar um usuário",
         "parameters": [
           {
             "name": "userId",
@@ -281,7 +351,10 @@
     },
     "/adm/user/all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Admin"
+        ],
+        "description": "Endpoint para buscar todos os usuários",
         "parameters": [
           {
             "name": "page",
@@ -311,7 +384,10 @@
     },
     "/bankAccount/": {
       "post": {
-        "description": "",
+        "tags": [
+          "Bank Account"
+        ],
+        "description": "Endpoint para criar uma nova conta bancária",
         "parameters": [
           {
             "name": "body",
@@ -333,6 +409,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
@@ -341,7 +420,10 @@
     },
     "/bankAccount/all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Bank Account"
+        ],
+        "description": "Endpoint para listar todas as contas bancárias do usuário",
         "parameters": [
           {
             "name": "page",
@@ -366,7 +448,10 @@
     },
     "/bankAccount/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Bank Account"
+        ],
+        "description": "Endpoint para listar uma conta bancária específica",
         "parameters": [
           {
             "name": "id",
@@ -385,7 +470,10 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": [
+          "Bank Account"
+        ],
+        "description": "Endpoint para atualizar uma conta bancária",
         "parameters": [
           {
             "name": "id",
@@ -419,7 +507,10 @@
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Bank Account"
+        ],
+        "description": "Endpoint para deletar uma conta bancária",
         "parameters": [
           {
             "name": "id",
@@ -440,7 +531,10 @@
     },
     "/transaction/": {
       "post": {
-        "description": "",
+        "tags": [
+          "Transaction"
+        ],
+        "description": "Endpoint para criar uma nova transação",
         "parameters": [
           {
             "name": "body",
@@ -468,6 +562,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
@@ -476,7 +573,10 @@
     },
     "/transaction/all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Transaction"
+        ],
+        "description": "Endpoint para listar todas as transações do usuário",
         "parameters": [
           {
             "name": "page",
@@ -501,7 +601,10 @@
     },
     "/transaction/allByBankAccount/{bankAccountId}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Transaction"
+        ],
+        "description": "Endpoint para listar todas as transações de uma conta bancária",
         "parameters": [
           {
             "name": "bankAccountId",
@@ -532,7 +635,10 @@
     },
     "/transaction/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Transaction"
+        ],
+        "description": "Endpoint para listar uma transação específica",
         "parameters": [
           {
             "name": "id",
@@ -551,7 +657,10 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": [
+          "Transaction"
+        ],
+        "description": "Endpoint para atualizar uma transação",
         "parameters": [
           {
             "name": "id",
@@ -585,13 +694,19 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Transaction"
+        ],
+        "description": "Endpoint para deletar uma transação",
         "parameters": [
           {
             "name": "id",
@@ -612,7 +727,10 @@
     },
     "/investment/": {
       "post": {
-        "description": "",
+        "tags": [
+          "Investment"
+        ],
+        "description": "Endpoint para criar um novo investimento",
         "parameters": [
           {
             "name": "body",
@@ -640,6 +758,9 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
@@ -648,7 +769,10 @@
     },
     "/investment/all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Investment"
+        ],
+        "description": "Endpoint para listar todos os investimentos do usuário",
         "parameters": [
           {
             "name": "page",
@@ -673,7 +797,10 @@
     },
     "/investment/{id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Investment"
+        ],
+        "description": "Endpoint para listar um investimento do usuário",
         "parameters": [
           {
             "name": "id",
@@ -692,7 +819,10 @@
         }
       },
       "put": {
-        "description": "",
+        "tags": [
+          "Investment"
+        ],
+        "description": "Endpoint para atualizar um investimento do usuário",
         "parameters": [
           {
             "name": "id",
@@ -726,13 +856,19 @@
           "200": {
             "description": "OK"
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "401": {
             "description": "Unauthorized"
           }
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Investment"
+        ],
+        "description": "Endpoint para deletar um investimento do usuário",
         "parameters": [
           {
             "name": "id",
@@ -753,7 +889,10 @@
     },
     "/investment/profit/all": {
       "get": {
-        "description": "",
+        "tags": [
+          "Investment"
+        ],
+        "description": "Endpoint para listar o lucro de todos os investimentos do usuário",
         "responses": {
           "200": {
             "description": "OK"
@@ -766,7 +905,10 @@
     },
     "/investment/profit/{code}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Investment"
+        ],
+        "description": "Endpoint para listar o lucro de um investimento específico do usuário",
         "parameters": [
           {
             "name": "code",

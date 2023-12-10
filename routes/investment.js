@@ -31,6 +31,8 @@ let authorization = (req, res, next) => {
 }
 
 router.post("/", authorization, async (req, res) => {
+  // #swagger.tags = ['Investment']
+  // #swagger.description = 'Endpoint para criar um novo investimento'
   let { code, amount, buyPrice, buyDate } = req.body;
   let { id: userId } = req.decoded;
 
@@ -50,6 +52,8 @@ router.post("/", authorization, async (req, res) => {
 });
 
 router.get("/all", authorization, async (req, res) => {
+  // #swagger.tags = ['Investment']
+  // #swagger.description = 'Endpoint para listar todos os investimentos do usuário'
   let { id: userId } = req.decoded;
   let { page, limit } = req.query;
 
@@ -62,6 +66,8 @@ router.get("/all", authorization, async (req, res) => {
 });
 
 router.get("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Investment']
+  // #swagger.description = 'Endpoint para listar um investimento do usuário'
   let { id } = req.params;
   let { id: userId } = req.decoded;
   try {
@@ -73,6 +79,8 @@ router.get("/:id", authorization, async (req, res) => {
 });
 
 router.put("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Investment']
+  // #swagger.description = 'Endpoint para atualizar um investimento do usuário'
   let { id } = req.params;
   let { code, amount, buyPrice, buyDate } = req.body;
   let { id: userId } = req.decoded;
@@ -93,6 +101,8 @@ router.put("/:id", authorization, async (req, res) => {
 });
 
 router.delete("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Investment']
+  // #swagger.description = 'Endpoint para deletar um investimento do usuário'
   let { id } = req.params;
   let { id: userId } = req.decoded;
   try {
@@ -104,6 +114,8 @@ router.delete("/:id", authorization, async (req, res) => {
 })
 
 router.get("/profit/all", authorization, async (req, res) => {
+  // #swagger.tags = ['Investment']
+  // #swagger.description = 'Endpoint para listar o lucro de todos os investimentos do usuário'
   let { id: userId } = req.decoded;
   try {
     let investment = await Investment.getAllByUserId(userId);
@@ -122,6 +134,8 @@ router.get("/profit/all", authorization, async (req, res) => {
 });
 
 router.get("/profit/:code", authorization, async (req, res) => {
+  // #swagger.tags = ['Investment']
+  // #swagger.description = 'Endpoint para listar o lucro de um investimento específico do usuário'
   let { code } = req.params;
   try {
     let investment = await Investment.getQuote(code);

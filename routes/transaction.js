@@ -26,6 +26,8 @@ let authorization = (req, res, next) => {
 }
 
 router.post("/", authorization, async (req, res) => {
+  // #swagger.tags = ['Transaction']
+  // #swagger.description = 'Endpoint para criar uma nova transação'
   let { value, date, type, bankAccountId } = req.body;
   let { id: userId } = req.decoded;
 
@@ -45,6 +47,8 @@ router.post("/", authorization, async (req, res) => {
 });
 
 router.get("/all", authorization, async (req, res) => {
+  // #swagger.tags = ['Transaction']
+  // #swagger.description = 'Endpoint para listar todas as transações do usuário'
   let { id: userId } = req.decoded;
   let { page, limit } = req.query;
 
@@ -57,6 +61,8 @@ router.get("/all", authorization, async (req, res) => {
 });
 
 router.get("/allByBankAccount/:bankAccountId", authorization, async (req, res) => {
+  // #swagger.tags = ['Transaction']
+  // #swagger.description = 'Endpoint para listar todas as transações de uma conta bancária'
   let { bankAccountId } = req.params;
   let { id: userId } = req.decoded;
   let { page, limit } = req.query;
@@ -70,6 +76,8 @@ router.get("/allByBankAccount/:bankAccountId", authorization, async (req, res) =
 })
 
 router.get("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Transaction']
+  // #swagger.description = 'Endpoint para listar uma transação específica'
   let { id } = req.params;
   let { id: userId } = req.decoded;
   try {
@@ -81,6 +89,8 @@ router.get("/:id", authorization, async (req, res) => {
 });
 
 router.put("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Transaction']
+  // #swagger.description = 'Endpoint para atualizar uma transação'
   let { id } = req.params;
   let { value, date, type, bankAccountId } = req.body;
   let { id: userId } = req.decoded;
@@ -101,6 +111,8 @@ router.put("/:id", authorization, async (req, res) => {
 });
 
 router.delete("/:id", authorization, async (req, res) => {
+  // #swagger.tags = ['Transaction']
+  // #swagger.description = 'Endpoint para deletar uma transação'
   let { id } = req.params;
   let { id: userId } = req.decoded;
   try {

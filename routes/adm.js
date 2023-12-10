@@ -28,6 +28,9 @@ let authorizationAdm = (req, res, next) => {
 };
 
 router.post("/", authorizationAdm, async (req, res) => {
+  // #swagger.tags = ['Admin']
+  // #swagger.description = 'Endpoint para criar um novo administrador'
+
   let { name, email, password, isAdmin } = req.body;
 
   const errors = verifyFields(req.body, ["name", "email", "password", "isAdmin"]);
@@ -46,6 +49,8 @@ router.post("/", authorizationAdm, async (req, res) => {
 });
 
 router.put("/user/:userId", authorizationAdm, async (req, res) => {
+  // #swagger.tags = ['Admin']
+  // #swagger.description = 'Endpoint para atualizar um usuário que não seja administrador ou atualizar a si mesmo'
   let { userId } = req.params;
   let { name, email, password, isAdmin } = req.body;
 
@@ -70,6 +75,8 @@ router.put("/user/:userId", authorizationAdm, async (req, res) => {
 });
 
 router.delete("/user/:userId", authorizationAdm, async (req, res) => {
+  // #swagger.tags = ['Admin']
+  // #swagger.description = 'Endpoint para deletar um usuário que não seja administrador ou deletar a si mesmo'
   let { userId } = req.params;
   let isAdmin = await User.isAdmin(userId);
   if (isAdmin && userId !== req.decoded.id) {
@@ -84,6 +91,8 @@ router.delete("/user/:userId", authorizationAdm, async (req, res) => {
 });
 
 router.get("/user/all", authorizationAdm, async (req, res) => {
+  // #swagger.tags = ['Admin']
+  // #swagger.description = 'Endpoint para buscar todos os usuários'
   let { page, limit } = req.query;
   try {
     let users = await User.getAll(page, limit);
@@ -94,6 +103,8 @@ router.get("/user/all", authorizationAdm, async (req, res) => {
 });
 
 router.get("/user/:userId", authorizationAdm, async (req, res) => {
+  // #swagger.tags = ['Admin']
+  // #swagger.description = 'Endpoint para buscar um usuário'
   let { userId } = req.params;
   try {
     let user = await User.getById(userId);
